@@ -1,10 +1,13 @@
 // Package formatter converts differences into output formats.
 package formatter
 
-import "fmt"
+import (
+	"code/internal/diff"
+	"fmt"
+)
 
 type diffFormatter interface {
-	Render(map[string]any) string
+	Render([]diff.Node) string
 }
 
 // New creates a formatter for the given format type.
