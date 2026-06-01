@@ -1,6 +1,8 @@
+// Package main implements the gendiff CLI application.
 package main
 
 import (
+	"code"
 	"context"
 	"fmt"
 	"os"
@@ -26,15 +28,18 @@ func main() {
 			if args.Len() != 2 {
 				return fmt.Errorf("expected 2 arguments: file1 and file2")
 			}
+
 			firstFP := args.Get(0)
 			secondFP := args.Get(1)
 			format := cmd.String("format")
-			fmt.Printf(
-				"file1=%s file2=%s format=%s\n",
-				firstFP,
-				secondFP,
-				format,
-			)
+
+			result, err := code.GenDiff(firstFP, secondFP, format)
+			if err != nil {
+				return err
+			}
+
+			fmt.Println(result)
+
 			return nil
 		},
 	}
