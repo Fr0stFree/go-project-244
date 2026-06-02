@@ -7,7 +7,7 @@ import (
 )
 
 type diffFormatter interface {
-	Render([]diff.Node) string
+	Render([]diff.Record) string
 }
 
 // New creates a formatter for the given format type.

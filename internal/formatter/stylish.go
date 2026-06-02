@@ -9,7 +9,7 @@ import (
 type stylishDiffFormatter struct{}
 
 // Render converts a diff into the stylish string representation.
-func (s *stylishDiffFormatter) Render(nodes []diff.Node) string {
+func (s *stylishDiffFormatter) Render(nodes []diff.Record) string {
 	builder := strings.Builder{}
 	builder.WriteRune('{')
 	builder.WriteRune('\n')

@@ -7,27 +7,27 @@ import (
 	"github.com/samber/lo"
 )
 
-type NodeState int
+type RecordState int
 
 const (
-	Added     NodeState = 0
-	Removed   NodeState = 1
-	Unchanged NodeState = 2
-	Changed   NodeState = 3
+	Added     RecordState = 0
+	Removed   RecordState = 1
+	Unchanged RecordState = 2
+	Changed   RecordState = 3
 )
 
-type Node struct {
+type Record struct {
 	Key      string
-	State    NodeState
+	State    RecordState
 	OldValue any
 	NewValue any
 }
 
 // Build compares two parsed configuration files and returns their difference.
-func Build(left, right map[string]any) []Node {
+func Build(left, right map[string]any) []Record {
 	keys := lo.Union(lo.Keys(left), lo.Keys(right))
 
-	nodes := make([]Node, 0, len(keys))
+	nodes := make([]Record, 0, len(keys))
 	for _, key := range keys {
 		leftValue, isExistInLeft := left[key]
 		rightValue, isExistInRight := right[key]
@@ -38,18 +38,18 @@ func Build(left, right map[string]any) []Node {
 	return nodes
 }
 
-func createNode(key string, oldValue, newValue any, isExistBefore, isExistAfter bool) Node {
+func createNode(key string, oldValue, newValue any, isExistBefore, isExistAfter bool) Record {
 	if !isExistAfter && isExistBefore {
-		return Node{key, Removed, oldValue, nil}
+		return Record{key, Removed, oldValue, nil}
 	}
 
 	if isExistAfter && !isExistBefore {
-		return Node{key, Added, nil, newValue}
+		return Record{key, Added, nil, newValue}
 	}
 
 	if reflect.DeepEqual(oldValue, newValue) {
-		return Node{key, Unchanged, oldValue, newValue}
+		return Record{key, Unchanged, oldValue, newValue}
 	}
 
-	return Node{key, Changed, oldValue, newValue}
+	return Record{key, Changed, oldValue, newValue}
 }
