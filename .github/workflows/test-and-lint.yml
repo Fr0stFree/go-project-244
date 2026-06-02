@@ -1,0 +1,28 @@
+name: Run tests and linters
+
+on: [push, pull_request]
+
+jobs:
+  test:
+    name: Run tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download the app
+        uses: actions/checkout@v4
+
+      - name: Set up golang
+        uses: actions/setup-go@v5
+        with:
+          go-version: "1.26.3"
+
+      - name: Install go dependencies
+        run: go mod download
+
+      - name: Build the app
+        run: make build
+
+      - name: Run the tests
+        run: make test
+
+      - name: Run the linters
+        run: make lint
