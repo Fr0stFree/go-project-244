@@ -1,0 +1,62 @@
+package diff
+
+import (
+	"testing"
+
+	"github.com/stretchr/testify/assert"
+)
+
+func TestBuild(t *testing.T) {
+	type testCase struct {
+		name       string
+		inputLeft  map[string]any
+		inputRight map[string]any
+		expected   []Record
+	}
+
+	testCases := []testCase{
+		{
+			name:       "should identify changed record",
+			inputLeft:  map[string]any{"foo": "bar"},
+			inputRight: map[string]any{"foo": "baz"},
+			expected:   []Record{{"foo", Changed, "bar", "baz"}},
+		},
+		{
+			name:       "should identify unchanged record",
+			inputLeft:  map[string]any{"foo": "bar"},
+			inputRight: map[string]any{"foo": "bar"},
+			expected:   []Record{{"foo", Unchanged, "bar", "bar"}},
+		},
+		{
+			name:       "should identify added record",
+			inputLeft:  map[string]any{},
+			inputRight: map[string]any{"foo": "bar"},
+			expected:   []Record{{"foo", Added, nil, "bar"}},
+		},
+		{
+			name:       "should identify removed record",
+			inputLeft:  map[string]any{"foo": "bar"},
+			inputRight: map[string]any{},
+			expected:   []Record{{"foo", Removed, "bar", nil}},
+		},
+		{
+			name:       "should identify multiple records",
+			inputLeft:  map[string]any{"foo": "bar", "one": "two"},
+			inputRight: map[string]any{"foo": "baz", "x": "y"},
+			expected:   []Record{{"foo", Changed, "bar", "baz"}, {"one", Removed, "two", nil}, {"x", Added, nil, "y"}},
+		},
+		{
+			name:       "should handle empty inputs",
+			inputLeft:  map[string]any{},
+			inputRight: map[string]any{},
+			expected:   []Record{},
+		},
+	}
+
+	for _, testCase := range testCases {
+		t.Run(testCase.name, func(t *testing.T) {
+			actual := Build(testCase.inputLeft, testCase.inputRight)
+			assert.Equal(t, testCase.expected, actual)
+		})
+	}
+}

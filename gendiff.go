@@ -25,5 +25,6 @@ func GenDiff(firstPath, secondPath, format string) (string, error) {
 	}
 
 	difference := diff.Build(left, right)
+
 	return formatter.Render(difference), nil
 }

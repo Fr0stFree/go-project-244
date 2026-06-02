@@ -2,7 +2,9 @@
 package diff
 
 import (
+	"cmp"
 	"reflect"
+	"slices"
 
 	"github.com/samber/lo"
 )
@@ -34,6 +36,10 @@ func Build(left, right map[string]any) []Record {
 		record := newRecord(key, leftValue, rightValue, isExistInLeft, isExistInRight)
 		records = append(records, record)
 	}
+
+	slices.SortFunc(records, func(a, b Record) int {
+		return cmp.Compare(a.Key, b.Key)
+	})
 
 	return records
 }
