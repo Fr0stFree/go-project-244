@@ -36,6 +36,8 @@ func selectParser(fileExt string) (parser, error) {
 	switch fileExt {
 	case ".json":
 		return jsonParser{}, nil
+	case ".yaml", ".yml":
+		return yamlParser{}, nil
 	case "":
 		return nil, errors.New("unable to parse file, file has no extension")
 	default:
