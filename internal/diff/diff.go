@@ -27,18 +27,18 @@ type Record struct {
 func Build(left, right map[string]any) []Record {
 	keys := lo.Union(lo.Keys(left), lo.Keys(right))
 
-	nodes := make([]Record, 0, len(keys))
+	records := make([]Record, 0, len(keys))
 	for _, key := range keys {
 		leftValue, isExistInLeft := left[key]
 		rightValue, isExistInRight := right[key]
-		node := createNode(key, leftValue, rightValue, isExistInLeft, isExistInRight)
-		nodes = append(nodes, node)
+		record := newRecord(key, leftValue, rightValue, isExistInLeft, isExistInRight)
+		records = append(records, record)
 	}
 
-	return nodes
+	return records
 }
 
-func createNode(key string, oldValue, newValue any, isExistBefore, isExistAfter bool) Record {
+func newRecord(key string, oldValue, newValue any, isExistBefore, isExistAfter bool) Record {
 	if !isExistAfter && isExistBefore {
 		return Record{key, Removed, oldValue, nil}
 	}

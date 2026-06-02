@@ -9,22 +9,22 @@ import (
 type stylishDiffFormatter struct{}
 
 // Render converts a diff into the stylish string representation.
-func (s *stylishDiffFormatter) Render(nodes []diff.Record) string {
+func (s *stylishDiffFormatter) Render(records []diff.Record) string {
 	builder := strings.Builder{}
 	builder.WriteRune('{')
 	builder.WriteRune('\n')
 
-	for _, node := range nodes {
-		switch node.State {
+	for _, record := range records {
+		switch record.State {
 		case diff.Added:
-			fmt.Fprintf(&builder, " + %s: %v\n", node.Key, node.NewValue)
+			fmt.Fprintf(&builder, " + %s: %v\n", record.Key, record.NewValue)
 		case diff.Removed:
-			fmt.Fprintf(&builder, " - %s: %v\n", node.Key, node.OldValue)
+			fmt.Fprintf(&builder, " - %s: %v\n", record.Key, record.OldValue)
 		case diff.Unchanged:
-			fmt.Fprintf(&builder, "   %s: %v\n", node.Key, node.OldValue)
+			fmt.Fprintf(&builder, "   %s: %v\n", record.Key, record.OldValue)
 		case diff.Changed:
-			fmt.Fprintf(&builder, " - %s: %v\n", node.Key, node.OldValue)
-			fmt.Fprintf(&builder, " + %s: %v\n", node.Key, node.NewValue)
+			fmt.Fprintf(&builder, " - %s: %v\n", record.Key, record.OldValue)
+			fmt.Fprintf(&builder, " + %s: %v\n", record.Key, record.NewValue)
 		}
 	}
 
