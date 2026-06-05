@@ -11,5 +11,6 @@ func (y yamlParser) run(payload []byte) (map[string]any, error) {
 	if err != nil {
 		return nil, err
 	}
+
 	return result, err
 }

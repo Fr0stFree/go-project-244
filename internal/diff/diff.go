@@ -9,20 +9,24 @@ import (
 	"github.com/samber/lo"
 )
 
-type RecordState int
+type recordState int
 
+// RecordState represents the type of difference between two values.
 const (
-	Added     RecordState = 0
-	Removed   RecordState = 1
-	Unchanged RecordState = 2
-	Changed   RecordState = 3
+	Added recordState = iota
+	Removed
+	Unchanged
+	Changed
+	Nested
 )
 
+// Record represents a difference between two values in a map.
 type Record struct {
 	Key      string
-	State    RecordState
+	State    recordState
 	OldValue any
 	NewValue any
+	Children []Record
 }
 
 // Build compares two parsed configuration files and returns their difference.
@@ -46,16 +50,23 @@ func Build(left, right map[string]any) []Record {
 
 func newRecord(key string, oldValue, newValue any, isExistBefore, isExistAfter bool) Record {
 	if !isExistAfter && isExistBefore {
-		return Record{key, Removed, oldValue, nil}
+		return Record{Key: key, State: Removed, OldValue: oldValue, NewValue: nil}
+	}
+
+	oldMap, isOldMap := oldValue.(map[string]any)
+	newMap, isNewMap := newValue.(map[string]any)
+
+	if isOldMap && isNewMap {
+		return Record{Key: key, State: Nested, OldValue: nil, NewValue: nil, Children: Build(oldMap, newMap)}
 	}
 
 	if isExistAfter && !isExistBefore {
-		return Record{key, Added, nil, newValue}
+		return Record{Key: key, State: Added, OldValue: nil, NewValue: newValue}
 	}
 
 	if reflect.DeepEqual(oldValue, newValue) {
-		return Record{key, Unchanged, oldValue, newValue}
+		return Record{Key: key, State: Unchanged, OldValue: oldValue, NewValue: newValue}
 	}
 
-	return Record{key, Changed, oldValue, newValue}
+	return Record{Key: key, State: Changed, OldValue: oldValue, NewValue: newValue}
 }
