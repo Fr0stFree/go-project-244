@@ -1,0 +1,18 @@
+common:
+  setting1: Value 1
+  setting3: null
+  setting4: blah blah
+  setting6:
+    key: value
+    doge:
+      wow: so much
+    ops: vops
+group1:
+  baz: bars
+  foo: bar
+  nest: str
+group3:
+  deep:
+    id:
+      number: 45
+  fee: 100500
