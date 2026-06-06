@@ -13,7 +13,7 @@ func (j *jsonDiffFormatter) Render(records []diff.Record) string {
 
 	result, err := json.MarshalIndent(data, "", "  ")
 	if err != nil {
-		panic(err)
+		panic(err) // TODO: handle error properly
 	}
 
 	return string(result)
