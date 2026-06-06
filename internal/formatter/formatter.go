@@ -17,6 +17,8 @@ func New(outputFormat string) (diffFormatter, error) {
 		return &stylishDiffFormatter{}, nil
 	case "plain":
 		return &plainDiffFormatter{}, nil
+	case "json":
+		return &jsonDiffFormatter{}, nil
 	default:
 		return nil, fmt.Errorf("unable to format: unsupported format type %s", outputFormat)
 	}

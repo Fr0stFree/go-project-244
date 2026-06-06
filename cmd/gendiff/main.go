@@ -55,7 +55,7 @@ func main() {
 	}
 
 	if err := cmd.Run(context.Background(), os.Args); err != nil {
-		fmt.Fprintln(cmd.ErrWriter, err)
+		fmt.Fprintln(os.Stderr, err)
 		os.Exit(1)
 	}
 }
