@@ -14,13 +14,13 @@ install-lint:
 		echo "Installation completed"; \
 	fi
 
-lint:
+lint: install-lint
 	@echo "Running linters..."
 	@test -z "$$(gofmt -l .)" || (echo "Code is not formatted"; exit 1)
 	@$(GOLANGCI_LINT) run
 	@echo "Linting completed."
 
-lint-fix:
+lint-fix: install-lint
 	@echo "Running linters with auto-fix..."
 	@gofmt -w .
 	@$(GOLANGCI_LINT) run --fix
