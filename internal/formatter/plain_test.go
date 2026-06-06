@@ -55,7 +55,20 @@ func TestRender(t *testing.T) {
 			},
 			expected: "Property 'foo.bar' was added with value: 'baz'",
 		},
-
+		{
+			name: "should render complex value",
+			records: []diff.Record{
+				{Key: "foo", State: diff.Added, OldValue: nil, NewValue: map[string]any{"bar": "baz"}, Children: nil},
+			},
+			expected: "Property 'foo' was added with value: [complex value]",
+		},
+		{
+			name: "should render null value",
+			records: []diff.Record{
+				{Key: "foo", State: diff.Added, OldValue: nil, NewValue: nil, Children: nil},
+			},
+			expected: "Property 'foo' was added with value: null",
+		},
 	}
 
 	for _, testCase := range testCases {
