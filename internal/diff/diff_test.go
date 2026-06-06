@@ -55,7 +55,7 @@ func TestBuild(t *testing.T) {
 			name:       "should handle nested maps",
 			inputLeft:  map[string]any{"foo": map[string]any{"bar": "baz"}},
 			inputRight: map[string]any{"foo": map[string]any{"bar": "qux"}},
-			expected:   []Record{{"foo", Changed, map[string]any{"bar": "baz"}, map[string]any{"bar": "qux"}, []Record{{"bar", Changed, "baz", "qux", nil}}}},
+			expected:   []Record{{"foo", Nested, nil, nil, []Record{{"bar", Changed, "baz", "qux", nil}}}},
 		},
 	}
 
