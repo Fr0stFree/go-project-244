@@ -49,6 +49,7 @@ func TestNew(t *testing.T) {
 			if testCase.shouldExpectError {
 				assert.Error(t, err)
 				assert.Nil(t, formatter)
+
 				return
 			}
 
