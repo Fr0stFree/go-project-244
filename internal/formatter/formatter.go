@@ -15,6 +15,8 @@ func New(outputFormat string) (diffFormatter, error) {
 	switch outputFormat {
 	case "stylish":
 		return &stylishDiffFormatter{}, nil
+	case "plain":
+		return &plainDiffFormatter{}, nil
 	default:
 		return nil, fmt.Errorf("unable to format: unsupported format type %s", outputFormat)
 	}

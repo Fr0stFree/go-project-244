@@ -32,14 +32,14 @@ func (s *stylishDiffFormatter) renderRecords(records []diff.Record, depth int) s
 	for _, record := range records {
 		switch record.State {
 		case diff.Added:
-			fmt.Fprintf(&builder, "%s%c %s: %s\n", markerIndent, '+', record.Key, formatValue(record.NewValue, depth+1))
+			fmt.Fprintf(&builder, "%s%c %s: %s\n", markerIndent, '+', record.Key, s.formatValue(record.NewValue, depth+1))
 		case diff.Removed:
-			fmt.Fprintf(&builder, "%s%c %s: %s\n", markerIndent, '-', record.Key, formatValue(record.OldValue, depth+1))
+			fmt.Fprintf(&builder, "%s%c %s: %s\n", markerIndent, '-', record.Key, s.formatValue(record.OldValue, depth+1))
 		case diff.Unchanged:
-			fmt.Fprintf(&builder, "%s%c %s: %s\n", markerIndent, ' ', record.Key, formatValue(record.OldValue, depth+1))
+			fmt.Fprintf(&builder, "%s%c %s: %s\n", markerIndent, ' ', record.Key, s.formatValue(record.OldValue, depth+1))
 		case diff.Changed:
-			fmt.Fprintf(&builder, "%s%c %s: %s\n", markerIndent, '-', record.Key, formatValue(record.OldValue, depth+1))
-			fmt.Fprintf(&builder, "%s%c %s: %s\n", markerIndent, '+', record.Key, formatValue(record.NewValue, depth+1))
+			fmt.Fprintf(&builder, "%s%c %s: %s\n", markerIndent, '-', record.Key, s.formatValue(record.OldValue, depth+1))
+			fmt.Fprintf(&builder, "%s%c %s: %s\n", markerIndent, '+', record.Key, s.formatValue(record.NewValue, depth+1))
 		case diff.Nested:
 			fmt.Fprintf(&builder, "%s%s: %s\n", nextIndent, record.Key, s.renderRecords(record.Children, depth+1))
 		default:
@@ -53,7 +53,7 @@ func (s *stylishDiffFormatter) renderRecords(records []diff.Record, depth int) s
 	return builder.String()
 }
 
-func formatValue(unknownValue any, depth int) string {
+func (s *stylishDiffFormatter) formatValue(unknownValue any, depth int) string {
 	switch value := unknownValue.(type) {
 	case map[string]any:
 		builder := strings.Builder{}
@@ -69,7 +69,7 @@ func formatValue(unknownValue any, depth int) string {
 
 		for _, key := range keys {
 			v := value[key]
-			fmt.Fprintf(&builder, "%s%s: %s\n", nextIndent, key, formatValue(v, depth+1))
+			fmt.Fprintf(&builder, "%s%s: %s\n", nextIndent, key, s.formatValue(v, depth+1))
 		}
 
 		builder.WriteString(currentIndent)
