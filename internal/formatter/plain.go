@@ -9,7 +9,7 @@ import (
 type plainDiffFormatter struct{}
 
 func (p *plainDiffFormatter) Render(records []diff.Record) string {
-	return p.renderRecords(records, "")
+	return strings.TrimSuffix(p.renderRecords(records, ""), "\n")
 }
 
 func (p *plainDiffFormatter) renderRecords(records []diff.Record, parentKey string) string {
