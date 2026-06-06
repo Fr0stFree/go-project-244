@@ -8,8 +8,8 @@ import (
 )
 
 // GenDiff compares two configuration files and returns their formatted difference.
-func GenDiff(firstPath, secondPath, format string) (string, error) {
-	formatter, err := formatter.New(format)
+func GenDiff(firstPath, secondPath, outputFormat string) (string, error) {
+	formatter, err := formatter.New(outputFormat)
 	if err != nil {
 		return "", err
 	}

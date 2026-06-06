@@ -14,6 +14,16 @@ func main() {
 	cmd := &cli.Command{
 		Name:  "gendiff",
 		Usage: "Compares two configuration files and shows a difference.",
+		Arguments: []cli.Argument{
+			&cli.StringArg{
+				Name:      "file1",
+				UsageText: "path to a first file",
+			},
+			&cli.StringArg{
+				Name:      "file2",
+				UsageText: "path to a second file",
+			},
+		},
 		Flags: []cli.Flag{
 			&cli.StringFlag{
 				Name:     "format",
@@ -24,16 +34,16 @@ func main() {
 			},
 		},
 		Action: func(_ context.Context, cmd *cli.Command) error {
-			args := cmd.Args()
-			if args.Len() != 2 {
-				return fmt.Errorf("expected 2 arguments: file1 and file2")
+			firstFile := cmd.StringArg("file1")
+
+			secondFile := cmd.StringArg("file2")
+			if firstFile == "" || secondFile == "" {
+				return cli.Exit("expected 2 arguments: file1 and file2", 1)
 			}
 
-			firstFP := args.Get(0)
-			secondFP := args.Get(1)
-			format := cmd.String("format")
+			outputFormat := cmd.String("format")
 
-			result, err := code.GenDiff(firstFP, secondFP, format)
+			result, err := code.GenDiff(firstFile, secondFile, outputFormat)
 			if err != nil {
 				return err
 			}
@@ -45,7 +55,7 @@ func main() {
 	}
 
 	if err := cmd.Run(context.Background(), os.Args); err != nil {
-		fmt.Fprintln(os.Stderr, err)
+		fmt.Fprintln(cmd.ErrWriter, err)
 		os.Exit(1)
 	}
 }

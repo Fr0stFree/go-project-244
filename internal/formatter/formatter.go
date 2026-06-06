@@ -11,11 +11,11 @@ type diffFormatter interface {
 }
 
 // New creates a formatter for the given format type.
-func New(fmtType string) (diffFormatter, error) {
-	switch fmtType {
+func New(outputFormat string) (diffFormatter, error) {
+	switch outputFormat {
 	case "stylish":
 		return &stylishDiffFormatter{}, nil
 	default:
-		return nil, fmt.Errorf("unable to format: unsupported format type %s", fmtType)
+		return nil, fmt.Errorf("unable to format: unsupported format type %s", outputFormat)
 	}
 }
