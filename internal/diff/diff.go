@@ -35,9 +35,9 @@ func Build(left, right map[string]any) []Record {
 
 	records := make([]Record, 0, len(keys))
 	for _, key := range keys {
-		leftValue, isExistInLeft := left[key]
-		rightValue, isExistInRight := right[key]
-		record := newRecord(key, leftValue, rightValue, isExistInLeft, isExistInRight)
+		leftValue, existsInLeft := left[key]
+		rightValue, existsInRight := right[key]
+		record := newRecord(key, leftValue, rightValue, existsInLeft, existsInRight)
 		records = append(records, record)
 	}
 
@@ -48,19 +48,19 @@ func Build(left, right map[string]any) []Record {
 	return records
 }
 
-func newRecord(key string, oldValue, newValue any, isExistBefore, isExistAfter bool) Record {
-	if !isExistAfter && isExistBefore {
+func newRecord(key string, oldValue, newValue any, existsBefore, existsAfter bool) Record {
+	if !existsAfter && existsBefore {
 		return Record{Key: key, State: Removed, OldValue: oldValue, NewValue: nil}
 	}
 
-	oldMap, isOldMap := oldValue.(map[string]any)
-	newMap, isNewMap := newValue.(map[string]any)
+	oldMap, wasMap := oldValue.(map[string]any)
+	newMap, isMap := newValue.(map[string]any)
 
-	if isOldMap && isNewMap {
+	if wasMap && isMap {
 		return Record{Key: key, State: Nested, OldValue: nil, NewValue: nil, Children: Build(oldMap, newMap)}
 	}
 
-	if isExistAfter && !isExistBefore {
+	if existsAfter && !existsBefore {
 		return Record{Key: key, State: Added, OldValue: nil, NewValue: newValue}
 	}
 
