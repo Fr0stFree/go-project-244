@@ -14,9 +14,10 @@ func fixturePath(paths ...string) string {
 
 func TestParseFile(t *testing.T) {
 	type testCase struct {
-		name     string
-		filepath string
-		expected map[string]any
+		name        string
+		filepath    string
+		expected    map[string]any
+		expectedErr error
 	}
 
 	testCases := []testCase{
@@ -40,11 +41,27 @@ func TestParseFile(t *testing.T) {
 				"follow":  false,
 			},
 		},
+		{
+			name:        "should fail on unsupported file type",
+			filepath:    fixturePath("toml", "file1.toml"),
+			expectedErr: ErrUnsupportedFileType,
+		},
+		{
+			name:        "should fail on missing file extension",
+			filepath:    fixturePath("undefined", "file1"),
+			expectedErr: ErrNoFileExtension,
+		},
 	}
 
 	for _, testCase := range testCases {
 		t.Run(testCase.name, func(t *testing.T) {
 			parsed, err := ParseFile(testCase.filepath)
+			if testCase.expectedErr != nil {
+				require.ErrorIs(t, err, testCase.expectedErr)
+
+				return
+			}
+
 			require.NoError(t, err)
 			assert.Equal(t, testCase.expected, parsed)
 		})
