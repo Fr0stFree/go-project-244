@@ -1,8 +1,10 @@
 GOLANGCI_LINT_VERSION := v2.12.2
 GOLANGCI_LINT := $(shell go env GOPATH)/bin/golangci-lint
 BINARY_PATH := bin/gendiff
+COVERAGE_PROFILE := coverage.out
+COVERAGE_BADGE := coverage-badge.json
 
-.PHONY: build lint lint-fix test install-lint
+.PHONY: build lint lint-fix test test-coverage install-lint
 
 install-lint:
 	@if test -x $(GOLANGCI_LINT); then \
@@ -33,3 +35,10 @@ build:
 
 test:
 	@go test ./... -v
+
+test-coverage:
+	@go test ./... -coverprofile=$(COVERAGE_PROFILE)
+	@go tool cover -func=$(COVERAGE_PROFILE)
+	@coverage=$$(go tool cover -func=$(COVERAGE_PROFILE) | awk '/^total:/ {print substr($$3, 1, length($$3)-1)}'); \
+	color=$$(awk -v coverage="$$coverage" 'BEGIN { if (coverage >= 80) print "brightgreen"; else if (coverage >= 60) print "yellow"; else print "red" }'); \
+	printf '{\n  "schemaVersion": 1,\n  "label": "coverage",\n  "message": "%s%%",\n  "color": "%s"\n}\n' "$$coverage" "$$color" > $(COVERAGE_BADGE)

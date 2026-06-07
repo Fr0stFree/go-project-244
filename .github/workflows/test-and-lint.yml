@@ -1,6 +1,13 @@
 name: Run tests and linters
 
-on: [push, pull_request]
+on:
+  push:
+    paths-ignore:
+      - coverage-badge.json
+  pull_request:
+
+permissions:
+  contents: write
 
 jobs:
   test:
@@ -23,6 +30,22 @@ jobs:
 
       - name: Run the tests
         run: make test
+
+      - name: Generate coverage report
+        run: make test-coverage
+
+      - name: Commit coverage badge
+        if: github.event_name == 'push' && github.ref == 'refs/heads/master'
+        run: |
+          if git diff --quiet -- coverage-badge.json; then
+            echo "Coverage badge is up to date"
+          else
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add coverage-badge.json
+            git commit -m "Update coverage badge [skip ci]"
+            git push
+          fi
 
       - name: Run the linters
         run: make lint

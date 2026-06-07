@@ -2,6 +2,7 @@
 
 [![Actions Status](https://github.com/Fr0stFree/go-project-244/actions/workflows/hexlet-check.yml/badge.svg)](https://github.com/Fr0stFree/go-project-244/actions)
 [![Tests and Lint](https://github.com/Fr0stFree/go-project-244/actions/workflows/test-and-lint.yml/badge.svg)](https://github.com/Fr0stFree/go-project-244/actions/workflows/test-and-lint.yml)
+[![Test Coverage](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/Fr0stFree/go-project-244/master/coverage-badge.json)](https://github.com/Fr0stFree/go-project-244/actions/workflows/test-and-lint.yml)
 
 `gendiff` is a command-line utility that compares two configuration files and shows the difference between them.
 
@@ -171,6 +172,7 @@ The project includes a `Makefile` with common development commands:
 | --- | --- |
 | `make build` | Builds the CLI binary into `bin/gendiff`. |
 | `make test` | Runs all Go tests with verbose output. |
+| `make test-coverage` | Runs tests, writes `coverage.out`, prints coverage by function, and updates `coverage-badge.json`. |
 | `make lint` | Checks formatting with `gofmt` and runs `golangci-lint`. |
 | `make lint-fix` | Formats code with `gofmt` and runs `golangci-lint --fix`. |
 | `make install-lint` | Installs `golangci-lint` if it is missing. |
@@ -179,5 +181,6 @@ Typical local check before pushing changes:
 
 ```bash
 make test
+make test-coverage
 make lint
 ```
