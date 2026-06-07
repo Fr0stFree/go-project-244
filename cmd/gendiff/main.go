@@ -3,8 +3,11 @@ package main
 
 import (
 	"code"
+	"code/internal/parser"
 	"context"
+	"errors"
 	"fmt"
+	"io/fs"
 	"os"
 
 	"github.com/urfave/cli/v3"
@@ -45,7 +48,7 @@ func main() {
 
 			result, err := code.GenDiff(firstFile, secondFile, outputFormat)
 			if err != nil {
-				return err
+				return handleGenDiffError(err)
 			}
 
 			fmt.Println(result)
@@ -57,5 +60,25 @@ func main() {
 	if err := cmd.Run(context.Background(), os.Args); err != nil {
 		fmt.Fprintln(os.Stderr, err)
 		os.Exit(1)
+	}
+}
+
+func handleGenDiffError(err error) error {
+	var parseErr *parser.ParseError
+	if !errors.As(err, &parseErr) {
+		return err
+	}
+
+	switch {
+	case errors.Is(err, parser.ErrNoFileExtension):
+		return cli.Exit(fmt.Sprintf("unable to parse file %q: file has no extension", parseErr.Path), 1)
+	case errors.Is(err, parser.ErrUnsupportedFileType):
+		return cli.Exit(fmt.Sprintf("unable to parse file %q: unsupported file extension", parseErr.Path), 1)
+	case errors.Is(err, fs.ErrNotExist):
+		return cli.Exit(fmt.Sprintf("unable to read file %q: file does not exist", parseErr.Path), 1)
+	case errors.Is(err, fs.ErrPermission):
+		return cli.Exit(fmt.Sprintf("unable to read file %q: permission denied", parseErr.Path), 1)
+	default:
+		return cli.Exit(fmt.Sprintf("unable to parse file %q: %v", parseErr.Path, parseErr.Err), 1)
 	}
 }
