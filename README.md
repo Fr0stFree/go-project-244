@@ -1,9 +1,5 @@
 # Gendiff
 
-[![Actions Status](https://github.com/Fr0stFree/go-project-244/actions/workflows/hexlet-check.yml/badge.svg)](https://github.com/Fr0stFree/go-project-244/actions)
-[![Tests and Lint](https://github.com/Fr0stFree/go-project-244/actions/workflows/test-and-lint.yml/badge.svg)](https://github.com/Fr0stFree/go-project-244/actions/workflows/test-and-lint.yml)
-[![Test Coverage](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/Fr0stFree/go-project-244/master/coverage-badge.json)](https://github.com/Fr0stFree/go-project-244/actions/workflows/test-and-lint.yml)
-
 `gendiff` is a command-line utility that compares two configuration files and shows the difference between them.
 
 The project supports JSON and YAML input files and can render the result in several output formats.
@@ -16,6 +12,21 @@ The project supports JSON and YAML input files and can render the result in seve
 - Supports `.json`, `.yaml`, and `.yml` files.
 - Provides three output formats: `stylish`, `plain`, and `json`.
 - Can be used as a CLI tool or through the public Go function `GenDiff`.
+
+## Pipeline Status
+
+[![Actions Status](https://github.com/Fr0stFree/go-project-244/actions/workflows/hexlet-check.yml/badge.svg)](https://github.com/Fr0stFree/go-project-244/actions)
+[![Tests and Lint](https://github.com/Fr0stFree/go-project-244/actions/workflows/test-and-lint.yml/badge.svg)](https://github.com/Fr0stFree/go-project-244/actions/workflows/test-and-lint.yml)
+
+## Quality
+
+[![Test Coverage](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/Fr0stFree/go-project-244/master/coverage-badge.json)](https://github.com/Fr0stFree/go-project-244/actions/workflows/test-and-lint.yml)
+[![Bugs](https://sonarcloud.io/api/project_badges/measure?project=Fr0stFree_go-project-244&metric=bugs)](https://sonarcloud.io/summary/new_code?id=Fr0stFree_go-project-244)
+[![Code Smells](https://sonarcloud.io/api/project_badges/measure?project=Fr0stFree_go-project-244&metric=code_smells)](https://sonarcloud.io/summary/new_code?id=Fr0stFree_go-project-244)
+[![Duplicated Lines (%)](https://sonarcloud.io/api/project_badges/measure?project=Fr0stFree_go-project-244&metric=duplicated_lines_density)](https://sonarcloud.io/summary/new_code?id=Fr0stFree_go-project-244)
+
+[![SonarQube Cloud](https://sonarcloud.io/images/project_badges/sonarcloud-light.svg)](https://sonarcloud.io/summary/new_code?id=Fr0stFree_go-project-244)
+
 
 ## Requirements
 
