@@ -7,6 +7,8 @@
 
 The project supports JSON and YAML input files and can render the result in several output formats.
 
+[A live demo](https://asciinema.org/a/1203308) is available on Asciinema.
+
 ## Features
 
 - Compares flat and nested configuration files.
