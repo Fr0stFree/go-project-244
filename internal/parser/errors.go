@@ -1,6 +1,9 @@
 package parser
 
-import "errors"
+import (
+	"errors"
+	"fmt"
+)
 
 var (
 	// ErrUnsupportedFileType means the file extension is not supported by parser.
@@ -16,7 +19,7 @@ type ParseError struct {
 }
 
 func (e ParseError) Error() string {
-	return e.Err.Error()
+	return fmt.Sprintf("unable to parse file %q: %v", e.Path, e.Err)
 }
 
 func (e ParseError) Unwrap() error {

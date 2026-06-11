@@ -34,7 +34,8 @@ func TestHandleGenDiffError(t *testing.T) {
 		},
 		{
 			name: "should handle missing file error",
-			err: &parser.ParseError{
+			err: &fs.PathError{
+				Op:   "open",
 				Path: "file.json",
 				Err:  fs.ErrNotExist,
 			},
@@ -42,7 +43,8 @@ func TestHandleGenDiffError(t *testing.T) {
 		},
 		{
 			name: "should handle permission error",
-			err: &parser.ParseError{
+			err: &fs.PathError{
+				Op:   "open",
 				Path: "file.json",
 				Err:  fs.ErrPermission,
 			},

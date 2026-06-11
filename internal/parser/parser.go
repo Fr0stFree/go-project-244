@@ -2,6 +2,7 @@
 package parser
 
 import (
+	"fmt"
 	"os"
 	"path/filepath"
 )
@@ -12,14 +13,14 @@ type parser interface {
 
 // ParseFile reads a file and parses its content based on the file extension.
 func ParseFile(path string) (map[string]any, error) {
-	raw, err := os.ReadFile(path)
+	parser, err := selectParser(filepath.Ext(path))
 	if err != nil {
 		return nil, newParseError(err, path)
 	}
 
-	parser, err := selectParser(filepath.Ext(path))
+	raw, err := os.ReadFile(path)
 	if err != nil {
-		return nil, newParseError(err, path)
+		return nil, fmt.Errorf("read file: %w", err)
 	}
 
 	parsed, err := parser.run(raw)
