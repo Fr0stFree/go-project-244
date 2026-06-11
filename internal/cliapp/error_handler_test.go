@@ -1,4 +1,4 @@
-package main
+package cliapp
 
 import (
 	"code/internal/parser"
@@ -8,7 +8,7 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-func TestHandleGenDiffError(t *testing.T) {
+func TestHandleCLIAppError(t *testing.T) {
 	type testCase struct {
 		name            string
 		err             error
@@ -54,7 +54,7 @@ func TestHandleGenDiffError(t *testing.T) {
 
 	for _, testCase := range testCases {
 		t.Run(testCase.name, func(t *testing.T) {
-			err := handleGenDiffError(testCase.err)
+			err := handleCLIAppError(testCase.err)
 
 			require.Error(t, err)
 			require.Equal(t, testCase.expectedMessage, err.Error())
