@@ -11,6 +11,7 @@ type runner interface {
 	Run(context.Context, []string) error
 }
 
+// NewRunner creates and returns a new CLI application runner.
 func NewRunner() runner {
 	return &cli.Command{
 		Name:      "gendiff",
