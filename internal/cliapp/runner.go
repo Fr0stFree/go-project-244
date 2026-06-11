@@ -36,13 +36,12 @@ func makeFlags() []cli.Flag {
 
 func makeArguments() []cli.Argument {
 	return []cli.Argument{
-		&cli.StringArg{
-			Name:      "file1",
-			UsageText: "path to a first file",
-		},
-		&cli.StringArg{
-			Name:      "file2",
-			UsageText: "path to a second file",
+		&cli.StringArgs{
+			Name:      "files",
+			UsageText: "two files to compare",
+			Min:       2,
+			Max:       2,
 		},
 	}
+
 }
