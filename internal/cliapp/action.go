@@ -12,6 +12,7 @@ func cliAppAction(onError func(error) error) func(_ context.Context, cmd *cli.Co
 	return func(_ context.Context, cmd *cli.Command) error {
 		files := cmd.StringArgs("files")
 		outputFormat := cmd.String("format")
+
 		result, err := code.GenDiff(files[0], files[1], outputFormat)
 		if err != nil {
 			return onError(err)

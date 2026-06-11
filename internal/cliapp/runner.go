@@ -43,5 +43,4 @@ func makeArguments() []cli.Argument {
 			Max:       2,
 		},
 	}
-
 }
