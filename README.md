@@ -27,7 +27,6 @@ The project supports JSON and YAML input files and can render the result in seve
 
 [![SonarQube Cloud](https://sonarcloud.io/images/project_badges/sonarcloud-light.svg)](https://sonarcloud.io/summary/new_code?id=Fr0stFree_go-project-244)
 
-
 ## Requirements
 
 - Go `1.26.3`
@@ -54,7 +53,7 @@ The compiled program will be available at:
 ## Usage
 
 ```bash
-gendiff [global options] [arguments...]
+./bin/gendiff [global options] file1 file2
 ```
 
 Arguments:
@@ -195,3 +194,26 @@ make test
 make test-coverage
 make lint
 ```
+
+## Project Structure
+
+```text
+.
+|-- cmd/gendiff        # CLI entry point
+|-- internal/diff      # Builds the internal diff representation
+|-- internal/formatter # Renders diff in stylish, plain, and JSON formats
+|-- internal/parser    # Parses JSON and YAML files
+|-- testdata/fixtures  # Test files used by tests and examples
+|-- gendiff.go         # Public package API
+`-- Makefile           # Development commands
+```
+
+## Public API
+
+The root package exposes `GenDiff`:
+
+```go
+result, err := code.GenDiff("file1.json", "file2.json", "stylish")
+```
+
+It accepts two file paths and an output format, then returns the formatted diff string.
