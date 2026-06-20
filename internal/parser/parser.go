@@ -7,13 +7,11 @@ import (
 	"path/filepath"
 )
 
-type parser interface {
-	run([]byte) (map[string]any, error)
-}
+type parseFunc func([]byte) (map[string]any, error)
 
 // ParseFile reads a file and parses its content based on the file extension.
 func ParseFile(path string) (map[string]any, error) {
-	parser, err := selectParser(filepath.Ext(path))
+	parseFunc, err := selectParseFunc(filepath.Ext(path))
 	if err != nil {
 		return nil, newParseError(err, path)
 	}
@@ -23,7 +21,7 @@ func ParseFile(path string) (map[string]any, error) {
 		return nil, fmt.Errorf("read file: %w", err)
 	}
 
-	parsed, err := parser.run(raw)
+	parsed, err := parseFunc(raw)
 	if err != nil {
 		return nil, newParseError(err, path)
 	}
@@ -31,12 +29,12 @@ func ParseFile(path string) (map[string]any, error) {
 	return parsed, nil
 }
 
-func selectParser(fileExt string) (parser, error) {
+func selectParseFunc(fileExt string) (parseFunc, error) {
 	switch fileExt {
 	case ".json":
-		return jsonParser{}, nil
+		return parseJSON, nil
 	case ".yaml", ".yml":
-		return yamlParser{}, nil
+		return parseYAML, nil
 	case "":
 		return nil, ErrNoFileExtension
 	default:

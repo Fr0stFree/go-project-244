@@ -4,9 +4,7 @@ import (
 	"encoding/json"
 )
 
-type jsonParser struct{}
-
-func (j jsonParser) run(payload []byte) (map[string]any, error) {
+func parseJSON(payload []byte) (map[string]any, error) {
 	var result map[string]any
 
 	err := json.Unmarshal(payload, &result)

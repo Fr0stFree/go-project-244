@@ -9,8 +9,8 @@ import (
 )
 
 func main() {
-	runner := cliapp.NewRunner()
-	if err := runner.Run(context.Background(), os.Args); err != nil {
+	app := cliapp.New()
+	if err := app.Run(context.Background(), os.Args); err != nil {
 		fmt.Fprintln(os.Stderr, err)
 		os.Exit(1)
 	}
