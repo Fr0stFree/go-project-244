@@ -8,6 +8,16 @@ import (
 
 type jsonDiffFormatter struct{}
 
+const (
+	jsonNodeType        = "type"
+	jsonNodeValue       = "value"
+	jsonNodeTypeAdded   = "added"
+	jsonNodeTypeRemoved = "removed"
+	jsonNodeTypeChanged = "changed"
+	jsonNodeNewValue    = "new"
+	jsonNodeOldValue    = "old"
+)
+
 func (j *jsonDiffFormatter) Render(records []diff.Record) string {
 	data := j.buildObject(records)
 
@@ -41,21 +51,21 @@ func (j *jsonDiffFormatter) buildNode(record diff.Record) any {
 
 	case diff.Added:
 		return map[string]any{
-			"type":  "added",
-			"value": record.NewValue,
+			jsonNodeType:  jsonNodeTypeAdded,
+			jsonNodeValue: record.NewValue,
 		}
 
 	case diff.Removed:
 		return map[string]any{
-			"type":  "removed",
-			"value": record.OldValue,
+			jsonNodeType:  jsonNodeTypeRemoved,
+			jsonNodeValue: record.OldValue,
 		}
 
 	case diff.Changed:
 		return map[string]any{
-			"type": "changed",
-			"old":  record.OldValue,
-			"new":  record.NewValue,
+			jsonNodeType:     jsonNodeTypeChanged,
+			jsonNodeOldValue: record.OldValue,
+			jsonNodeNewValue: record.NewValue,
 		}
 
 	case diff.Nested:
