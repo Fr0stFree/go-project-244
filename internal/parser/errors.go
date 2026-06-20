@@ -18,11 +18,11 @@ type ParseError struct {
 	Path string
 }
 
-func (e ParseError) Error() string {
+func (e *ParseError) Error() string {
 	return fmt.Sprintf("unable to parse file %q: %v", e.Path, e.Err)
 }
 
-func (e ParseError) Unwrap() error {
+func (e *ParseError) Unwrap() error {
 	return e.Err
 }
 
