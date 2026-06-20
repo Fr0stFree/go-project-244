@@ -2,6 +2,7 @@
 package cliapp
 
 import (
+	"code"
 	"context"
 	"fmt"
 
@@ -21,9 +22,23 @@ func NewRunner() runner {
 		Usage:     "Compares two configuration files and shows a difference.",
 		Arguments: makeArguments(),
 		Flags:     makeFlags(),
-		Action:    cliAppAction(handleCLIAppError),
+		Action:    appAction,
 		UsageText: "gendiff [options] <file1> <file2>",
 	}
+}
+
+func appAction(_ context.Context, cmd *cli.Command) error {
+	files := cmd.StringArgs("files")
+	outputFormat := cmd.String("format")
+
+	result, err := code.GenDiff(files[0], files[1], outputFormat)
+	if err != nil {
+		return toCLIExitError(err)
+	}
+
+	fmt.Println(result)
+
+	return nil
 }
 
 func makeFlags() []cli.Flag {
