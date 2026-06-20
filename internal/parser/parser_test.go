@@ -9,7 +9,7 @@ import (
 )
 
 func fixturePath(paths ...string) string {
-	return filepath.Join("..", "..", "testdata", "fixtures", filepath.Join(paths...))
+	return filepath.Join("..", "testdata", "fixtures", filepath.Join(paths...))
 }
 
 func TestParseFile(t *testing.T) {
