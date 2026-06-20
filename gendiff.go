@@ -9,10 +9,12 @@ import (
 
 // GenDiff compares two configuration files and returns their formatted difference.
 func GenDiff(firstPath, secondPath, outputFormat string) (string, error) {
-	formatter, err := formatter.New(outputFormat)
+	style, err := formatter.NewStyleFromString(outputFormat)
 	if err != nil {
 		return "", err
 	}
+
+	formatter := formatter.New(style)
 
 	left, err := parser.ParseFile(firstPath)
 	if err != nil {

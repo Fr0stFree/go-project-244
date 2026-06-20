@@ -10,51 +10,48 @@ import (
 func TestNew(t *testing.T) {
 	type testCase struct {
 		name              string
-		outputFormat      string
+		outputFormat      Style
 		expectedFormatter any
-		shouldExpectError bool
+		shouldExpectPanic bool
 	}
 
 	testCases := []testCase{
 		{
 			name:              "should initialize stylish formatter",
-			outputFormat:      "stylish",
+			outputFormat:      Stylish,
 			expectedFormatter: &stylishDiffFormatter{},
-			shouldExpectError: false,
+			shouldExpectPanic: false,
 		},
 		{
 			name:              "should initialize plain formatter",
-			outputFormat:      "plain",
+			outputFormat:      Plain,
 			expectedFormatter: &plainDiffFormatter{},
-			shouldExpectError: false,
+			shouldExpectPanic: false,
 		},
 		{
 			name:              "should initialize json formatter",
-			outputFormat:      "json",
+			outputFormat:      JSON,
 			expectedFormatter: &jsonDiffFormatter{},
-			shouldExpectError: false,
+			shouldExpectPanic: false,
 		},
 		{
 			name:              "should return error for unsupported format",
 			outputFormat:      "unsupported",
 			expectedFormatter: nil,
-			shouldExpectError: true,
+			shouldExpectPanic: true,
 		},
 	}
 
 	for _, testCase := range testCases {
 		t.Run(testCase.name, func(t *testing.T) {
-			formatter, err := New(testCase.outputFormat)
-
-			if testCase.shouldExpectError {
-				assert.Error(t, err)
-				assert.Nil(t, formatter)
-
-				return
+			if testCase.shouldExpectPanic {
+				assert.Panics(t, func() {
+					_ = New(testCase.outputFormat)
+				})
+			} else {
+				formatter := New(testCase.outputFormat)
+				require.IsType(t, testCase.expectedFormatter, formatter)
 			}
-
-			require.NoError(t, err)
-			assert.IsType(t, testCase.expectedFormatter, formatter)
 		})
 	}
 }

@@ -3,6 +3,9 @@ package cliapp
 
 import (
 	"context"
+	"fmt"
+
+	"code/internal/formatter"
 
 	"github.com/urfave/cli/v3"
 )
@@ -19,6 +22,7 @@ func NewRunner() runner {
 		Arguments: makeArguments(),
 		Flags:     makeFlags(),
 		Action:    cliAppAction(handleCLIAppError),
+		UsageText: "gendiff [options] <file1> <file2>",
 	}
 }
 
@@ -27,13 +31,12 @@ func makeFlags() []cli.Flag {
 		&cli.StringFlag{
 			Name:     "format",
 			Aliases:  []string{"f"},
-			Value:    "stylish",
+			Value:    formatter.Stylish.String(),
 			Required: false,
-			Usage:    "output format",
+			Usage:    fmt.Sprintf("output format (%s, %s, %s)", formatter.Stylish, formatter.Plain, formatter.JSON),
 		},
 	}
 }
-
 func makeArguments() []cli.Argument {
 	return []cli.Argument{
 		&cli.StringArgs{
