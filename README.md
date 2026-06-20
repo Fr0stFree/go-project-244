@@ -182,7 +182,8 @@ The project includes a `Makefile` with common development commands:
 | --- | --- |
 | `make build` | Builds the CLI binary into `bin/gendiff`. |
 | `make test` | Runs all Go tests with verbose output. |
-| `make test-coverage` | Runs tests, writes `coverage.out`, prints coverage by function, and updates `coverage-badge.json`. |
+| `make test-coverage` | Runs tests, writes `coverage.out`, and prints coverage by function. |
+| `make coverage-badge` | Updates `coverage-badge.json` from the current coverage report. |
 | `make lint` | Checks formatting with `gofmt` and runs `golangci-lint`. |
 | `make lint-fix` | Formats code with `gofmt` and runs `golangci-lint --fix`. |
 | `make install-lint` | Installs `golangci-lint` if it is missing. |
