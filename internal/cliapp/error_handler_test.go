@@ -54,7 +54,7 @@ func TestHandleCLIAppError(t *testing.T) {
 
 	for _, testCase := range testCases {
 		t.Run(testCase.name, func(t *testing.T) {
-			err := handleCLIAppError(testCase.err)
+			err := toCLIExitError(testCase.err)
 
 			require.Error(t, err)
 			require.Equal(t, testCase.expectedMessage, err.Error())
