@@ -14,8 +14,6 @@ func GenDiff(firstPath, secondPath, outputFormat string) (string, error) {
 		return "", err
 	}
 
-	formatter := formatter.New(style)
-
 	left, err := parser.ParseFile(firstPath)
 	if err != nil {
 		return "", err
@@ -28,5 +26,12 @@ func GenDiff(firstPath, secondPath, outputFormat string) (string, error) {
 
 	difference := diff.Build(left, right)
 
-	return formatter.Render(difference), nil
+	formatter := formatter.New(style)
+
+	output, err := formatter.Render(difference)
+	if err != nil {
+		return "", err
+	}
+
+	return output, nil
 }

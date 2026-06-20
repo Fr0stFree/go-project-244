@@ -15,8 +15,8 @@ const markerSize int = 2
 type stylishDiffFormatter struct{}
 
 // Render converts a diff into the stylish string representation.
-func (s *stylishDiffFormatter) Render(records []diff.Record) string {
-	return s.renderRecords(records, 0)
+func (s *stylishDiffFormatter) Render(records []diff.Record) (string, error) {
+	return s.renderRecords(records, 0), nil
 }
 
 func (s *stylishDiffFormatter) renderRecords(records []diff.Record, depth int) string {

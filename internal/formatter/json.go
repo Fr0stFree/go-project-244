@@ -18,15 +18,15 @@ const (
 	jsonNodeOldValue    = "old"
 )
 
-func (j *jsonDiffFormatter) Render(records []diff.Record) string {
+func (j *jsonDiffFormatter) Render(records []diff.Record) (string, error) {
 	data := j.buildObject(records)
 
 	result, err := json.MarshalIndent(data, "", "  ")
 	if err != nil {
-		panic(err) // TODO: should I handle properly? I think this is an unexpected error, so panic is ok.
+		return "", fmt.Errorf("failed to marshal JSON: %w", err)
 	}
 
-	return string(result)
+	return string(result), nil
 }
 
 func (j *jsonDiffFormatter) buildObject(records []diff.Record) map[string]any {

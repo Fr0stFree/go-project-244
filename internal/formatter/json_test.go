@@ -60,7 +60,8 @@ func TestJsonRender(t *testing.T) {
 	for _, testCase := range testCases {
 		t.Run(testCase.name, func(t *testing.T) {
 			formatter := &jsonDiffFormatter{}
-			result := formatter.Render(testCase.records)
+			result, err := formatter.Render(testCase.records)
+			assert.NoError(t, err)
 			assert.Equal(t, testCase.expected, result)
 		})
 	}

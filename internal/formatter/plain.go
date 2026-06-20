@@ -8,8 +8,8 @@ import (
 
 type plainDiffFormatter struct{}
 
-func (p *plainDiffFormatter) Render(records []diff.Record) string {
-	return strings.TrimSuffix(p.renderRecords(records, ""), "\n")
+func (p *plainDiffFormatter) Render(records []diff.Record) (string, error) {
+	return strings.TrimSuffix(p.renderRecords(records, ""), "\n"), nil
 }
 
 func (p *plainDiffFormatter) renderRecords(records []diff.Record, parentKey string) string {

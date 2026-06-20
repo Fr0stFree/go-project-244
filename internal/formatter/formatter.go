@@ -33,7 +33,7 @@ func NewStyleFromString(s string) (Style, error) {
 }
 
 type diffFormatter interface {
-	Render([]diff.Record) string
+	Render([]diff.Record) (string, error)
 }
 
 // New creates a formatter for the given format type.
