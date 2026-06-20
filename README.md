@@ -184,13 +184,14 @@ The project includes a `Makefile` with common development commands:
 | `make test` | Runs all Go tests with verbose output. |
 | `make test-coverage` | Runs tests, writes `coverage.out`, and prints coverage by function. |
 | `make coverage-badge` | Updates `coverage-badge.json` from the current coverage report. |
-| `make lint` | Checks formatting with `gofmt` and runs `golangci-lint`. |
-| `make lint-fix` | Formats code with `gofmt` and runs `golangci-lint --fix`. |
+| `make lint` | Checks formatting with `gofmt` and runs the installed `golangci-lint`. |
+| `make lint-fix` | Formats code with `gofmt` and runs the installed `golangci-lint --fix`. |
 | `make install-lint` | Installs `golangci-lint` if it is missing. |
 
 Typical local check before pushing changes:
 
 ```bash
+make install-lint
 make test
 make test-coverage
 make lint

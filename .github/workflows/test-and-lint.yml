@@ -53,5 +53,8 @@ jobs:
           go-version-file: go.mod
           cache: true
 
+      - name: Install golangci-lint
+        run: make install-lint
+
       - name: Run the linters
         run: make lint

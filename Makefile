@@ -4,25 +4,28 @@ BINARY_PATH := bin/gendiff
 COVERAGE_PROFILE := coverage.out
 COVERAGE_BADGE := coverage-badge.json
 
-.PHONY: build lint lint-fix test test-coverage coverage-badge install-lint
+.PHONY: build lint lint-fix test test-coverage coverage-badge install-lint require-lint
 
 install-lint:
 	@if test -x $(GOLANGCI_LINT); then \
-		echo "Using existing golangci-lint: $(GOLANGCI_LINT)"; \
+		echo "Golangci-lint is already installed at $(GOLANGCI_LINT)"; \
+		$(GOLANGCI_LINT) --version; \
 	else \
-		echo "golangci-lint not found"; \
 		echo "Installing version $(GOLANGCI_LINT_VERSION)..."; \
 		go install github.com/golangci/golangci-lint/v2/cmd/golangci-lint@$(GOLANGCI_LINT_VERSION); \
 		echo "Installation completed"; \
 	fi
 
-lint: install-lint
+require-lint:
+	@test -x $(GOLANGCI_LINT) || (echo "golangci-lint not found. Run 'make install-lint' first."; exit 1)
+
+lint: require-lint
 	@echo "Running linters..."
 	@test -z "$$(gofmt -l .)" || (echo "Code is not formatted"; exit 1)
 	@$(GOLANGCI_LINT) run
 	@echo "Linting completed."
 
-lint-fix: install-lint
+lint-fix: require-lint
 	@echo "Running linters with auto-fix..."
 	@gofmt -w .
 	@$(GOLANGCI_LINT) run --fix
