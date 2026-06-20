@@ -49,24 +49,23 @@ func Build(left, right map[string]any) []Record {
 }
 
 func newRecord(key string, oldValue, newValue any, existsBefore, existsAfter bool) Record {
-	if !existsAfter && existsBefore {
-		return Record{Key: key, State: Removed, OldValue: oldValue, NewValue: nil}
-	}
-
 	oldMap, wasMap := oldValue.(map[string]any)
 	newMap, isMap := newValue.(map[string]any)
 
-	if wasMap && isMap {
-		return Record{Key: key, State: Nested, OldValue: nil, NewValue: nil, Children: Build(oldMap, newMap)}
-	}
+	switch {
+	case !existsAfter && existsBefore:
+		return Record{Key: key, State: Removed, OldValue: oldValue, NewValue: nil}
 
-	if existsAfter && !existsBefore {
+	case existsAfter && !existsBefore:
 		return Record{Key: key, State: Added, OldValue: nil, NewValue: newValue}
-	}
 
-	if reflect.DeepEqual(oldValue, newValue) {
+	case reflect.DeepEqual(oldValue, newValue):
 		return Record{Key: key, State: Unchanged, OldValue: oldValue, NewValue: newValue}
-	}
 
-	return Record{Key: key, State: Changed, OldValue: oldValue, NewValue: newValue}
+	case wasMap && isMap:
+		return Record{Key: key, State: Nested, OldValue: nil, NewValue: nil, Children: Build(oldMap, newMap)}
+
+	default:
+		return Record{Key: key, State: Changed, OldValue: oldValue, NewValue: newValue}
+	}
 }
