@@ -57,6 +57,14 @@ func TestBuild(t *testing.T) {
 			inputRight: map[string]any{"foo": map[string]any{"bar": "qux"}},
 			expected:   []Record{{"foo", Nested, nil, nil, []Record{{"bar", Changed, "baz", "qux", nil}}}},
 		},
+		{
+			name:       "should build nested record for equal maps",
+			inputLeft:  map[string]any{"settings": map[string]any{"timeout": 50}},
+			inputRight: map[string]any{"settings": map[string]any{"timeout": 50}},
+			expected: []Record{
+				{"settings", Nested, nil, nil, []Record{{"timeout", Unchanged, 50, 50, nil}}},
+			},
+		},
 	}
 
 	for _, testCase := range testCases {

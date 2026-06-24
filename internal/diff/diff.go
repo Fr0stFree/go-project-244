@@ -59,11 +59,11 @@ func newRecord(key string, oldValue, newValue any, existsBefore, existsAfter boo
 	case existsAfter && !existsBefore:
 		return Record{Key: key, State: Added, OldValue: nil, NewValue: newValue}
 
+	case wasMap && isMap:
+		return Record{Key: key, State: Nested, Children: Build(oldMap, newMap)}
+
 	case reflect.DeepEqual(oldValue, newValue):
 		return Record{Key: key, State: Unchanged, OldValue: oldValue, NewValue: newValue}
-
-	case wasMap && isMap:
-		return Record{Key: key, State: Nested, OldValue: nil, NewValue: nil, Children: Build(oldMap, newMap)}
 
 	default:
 		return Record{Key: key, State: Changed, OldValue: oldValue, NewValue: newValue}
