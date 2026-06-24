@@ -20,7 +20,7 @@ The project supports JSON and YAML input files and can render the result in seve
 
 ## Quality
 
-[![Test Coverage](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/Fr0stFree/go-project-244/master/coverage-badge.json)](https://github.com/Fr0stFree/go-project-244/actions/workflows/test-and-lint.yml)
+[![Test Coverage](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/Fr0stFree/go-project-244/master/.github/badges/coverage-badge.json)](https://github.com/Fr0stFree/go-project-244/actions/workflows/test-and-lint.yml)
 [![Bugs](https://sonarcloud.io/api/project_badges/measure?project=Fr0stFree_go-project-244&metric=bugs)](https://sonarcloud.io/summary/new_code?id=Fr0stFree_go-project-244)
 [![Code Smells](https://sonarcloud.io/api/project_badges/measure?project=Fr0stFree_go-project-244&metric=code_smells)](https://sonarcloud.io/summary/new_code?id=Fr0stFree_go-project-244)
 [![Duplicated Lines (%)](https://sonarcloud.io/api/project_badges/measure?project=Fr0stFree_go-project-244&metric=duplicated_lines_density)](https://sonarcloud.io/summary/new_code?id=Fr0stFree_go-project-244)
@@ -32,7 +32,7 @@ The project supports JSON and YAML input files and can render the result in seve
 - Go `1.26.3`
 - `make`
 
-The linter target uses `golangci-lint` `v2.12.2`. If it is not installed, `make lint` and `make lint-fix` install it automatically into your Go binary directory.
+The linter target uses `golangci-lint` `v2.12.2`. Run `make install-lint` once before `make lint` or `make lint-fix`.
 
 ## Installation
 
@@ -183,10 +183,11 @@ The project includes a `Makefile` with common development commands:
 | `make build` | Builds the CLI binary into `bin/gendiff`. |
 | `make test` | Runs all Go tests with verbose output. |
 | `make test-coverage` | Runs tests, writes `coverage.out`, and prints coverage by function. |
-| `make coverage-badge` | Updates `coverage-badge.json` from the current coverage report. |
 | `make lint` | Checks formatting with `gofmt` and runs the installed `golangci-lint`. |
 | `make lint-fix` | Formats code with `gofmt` and runs the installed `golangci-lint --fix`. |
 | `make install-lint` | Installs `golangci-lint` if it is missing. |
+
+To update the coverage badge manually, run `make test-coverage` and then `.github/scripts/generate-coverage-badge.sh`.
 
 Typical local check before pushing changes:
 
