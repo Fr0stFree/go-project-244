@@ -11,23 +11,39 @@ import (
 	"github.com/urfave/cli/v3"
 )
 
-// New creates and returns a new CLI application.
-func New() *cli.Command {
-	return &cli.Command{
-		Name:      "gendiff",
-		Usage:     "Compares two configuration files and shows a difference.",
-		Arguments: makeArguments(),
-		Flags:     makeFlags(),
-		Action:    appAction,
-		UsageText: "gendiff [options] <file1> <file2>",
-	}
+const (
+	firstFileArg     = "first-file"
+	secondFileArg    = "second-file"
+	outputFormatFlag = "format"
+)
+
+var cliArgs = []cli.Argument{
+	&cli.StringArg{
+		Name:      firstFileArg,
+		UsageText: "file path to the first configuration file",
+	},
+	&cli.StringArg{
+		Name:      secondFileArg,
+		UsageText: "file path to the second configuration file",
+	},
+}
+
+var cliFlags = []cli.Flag{
+	&cli.StringFlag{
+		Name:     outputFormatFlag,
+		Aliases:  []string{"f"},
+		Value:    formatter.Stylish.String(),
+		Required: false,
+		Usage:    fmt.Sprintf("output format (%s, %s, %s)", formatter.Stylish, formatter.Plain, formatter.JSON),
+	},
 }
 
 func appAction(_ context.Context, cmd *cli.Command) error {
-	files := cmd.StringArgs("files")
-	outputFormat := cmd.String("format")
+	firstFile := cmd.StringArg(firstFileArg)
+	secondFile := cmd.StringArg(secondFileArg)
+	outputFormat := cmd.String(outputFormatFlag)
 
-	result, err := code.GenDiff(files[0], files[1], outputFormat)
+	result, err := code.GenDiff(firstFile, secondFile, outputFormat)
 	if err != nil {
 		return toCLIExitError(err)
 	}
@@ -37,24 +53,14 @@ func appAction(_ context.Context, cmd *cli.Command) error {
 	return nil
 }
 
-func makeFlags() []cli.Flag {
-	return []cli.Flag{
-		&cli.StringFlag{
-			Name:     "format",
-			Aliases:  []string{"f"},
-			Value:    formatter.Stylish.String(),
-			Required: false,
-			Usage:    fmt.Sprintf("output format (%s, %s, %s)", formatter.Stylish, formatter.Plain, formatter.JSON),
-		},
-	}
-}
-func makeArguments() []cli.Argument {
-	return []cli.Argument{
-		&cli.StringArgs{
-			Name:      "files",
-			UsageText: "two files to compare",
-			Min:       2,
-			Max:       2,
-		},
+// New creates and returns a new CLI application.
+func New() *cli.Command {
+	return &cli.Command{
+		Name:      "gendiff",
+		Usage:     "Compares two configuration files and shows a difference.",
+		Arguments: cliArgs,
+		Flags:     cliFlags,
+		Action:    appAction,
+		UsageText: fmt.Sprintf("gendiff [options] <%s> <%s>", firstFileArg, secondFileArg),
 	}
 }
