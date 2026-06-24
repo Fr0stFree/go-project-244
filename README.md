@@ -53,13 +53,13 @@ The compiled program will be available at:
 ## Usage
 
 ```bash
-./bin/gendiff [global options] file1 file2
+./bin/gendiff [global options] <first-file> <second-file>
 ```
 
 Arguments:
 
-- `file1` - path to the first configuration file.
-- `file2` - path to the second configuration file.
+- `first-file` - path to the first configuration file.
+- `second-file` - path to the second configuration file.
 
 Options:
 
@@ -76,14 +76,14 @@ You can check the CLI help with:
 
 ## Examples
 
-All examples below use the compiled binary and fixtures from the `testdata` directory.
+All examples below use the compiled binary and fixtures from the `internal/testdata/fixtures` directory.
 
 ### Stylish Format
 
 `stylish` is the default output format, so the `--format` flag can be omitted.
 
 ```bash
-./bin/gendiff testdata/fixtures/json/file1.json testdata/fixtures/json/file2.json
+./bin/gendiff internal/testdata/fixtures/json/file1.json internal/testdata/fixtures/json/file2.json
 ```
 
 Output:
@@ -102,7 +102,7 @@ Output:
 The same format works for YAML files:
 
 ```bash
-./bin/gendiff testdata/fixtures/yaml/file1.yaml testdata/fixtures/yaml/file2.yaml --format stylish
+./bin/gendiff internal/testdata/fixtures/yaml/file1.yaml internal/testdata/fixtures/yaml/file2.yaml --format stylish
 ```
 
 Output:
@@ -123,7 +123,7 @@ Output:
 `plain` is useful when you want a human-readable description of changed properties.
 
 ```bash
-./bin/gendiff testdata/fixtures/json/file3.json testdata/fixtures/json/file4.json --format plain
+./bin/gendiff internal/testdata/fixtures/json/file3.json internal/testdata/fixtures/json/file4.json --format plain
 ```
 
 Output:
@@ -144,10 +144,10 @@ Property 'group3' was added with value: [complex value]
 
 ### JSON Format
 
-`json` is useful when the diff result should be consumed by another program.
+`json` is useful when the diff result should be consumed by another program. It serializes the full diff tree, including unchanged nodes.
 
 ```bash
-./bin/gendiff testdata/fixtures/json/file1.json testdata/fixtures/json/file2.json --format json
+./bin/gendiff internal/testdata/fixtures/json/file1.json internal/testdata/fixtures/json/file2.json --format json
 ```
 
 Output:
@@ -157,6 +157,10 @@ Output:
   "follow": {
     "type": "removed",
     "value": false
+  },
+  "host": {
+    "type": "unchanged",
+    "value": "hexlet.io"
   },
   "proxy": {
     "type": "removed",
@@ -187,7 +191,12 @@ The project includes a `Makefile` with common development commands:
 | `make lint-fix` | Formats code with `gofmt` and runs the installed `golangci-lint --fix`. |
 | `make install-lint` | Installs `golangci-lint` if it is missing. |
 
-To update the coverage badge manually, run `make test-coverage` and then `.github/scripts/generate-coverage-badge.sh`.
+To update the coverage badge manually:
+
+```bash
+make test-coverage
+.github/scripts/generate-coverage-badge.sh
+```
 
 Typical local check before pushing changes:
 
@@ -203,10 +212,13 @@ make lint
 ```text
 .
 |-- cmd/gendiff        # CLI entry point
+|-- .github/badges     # Generated badge data
+|-- .github/scripts    # Maintenance scripts
+|-- .github/workflows  # GitHub Actions workflows
 |-- internal/diff      # Builds the internal diff representation
 |-- internal/formatter # Renders diff in stylish, plain, and JSON formats
 |-- internal/parser    # Parses JSON and YAML files
-|-- testdata/fixtures  # Test files used by tests and examples
+|-- internal/testdata  # Test files used by tests and examples
 |-- gendiff.go         # Public package API
 `-- Makefile           # Development commands
 ```
