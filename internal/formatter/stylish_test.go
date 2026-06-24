@@ -55,6 +55,21 @@ func TestStylishRender(t *testing.T) {
 			},
 			expected: "{\n    foo: {\n      + bar: baz\n    }\n}",
 		},
+		{
+			name: "should render complex value",
+			records: []diff.Record{
+				{
+					Key: "config", State: diff.Added, OldValue: nil,
+					NewValue: map[string]any{
+						"enabled": true,
+						"nested":  map[string]any{"key": "value"},
+						"nothing": nil,
+					},
+					Children: nil,
+				},
+			},
+			expected: "{\n  + config: {\n        enabled: true\n        nested: {\n            key: value\n        }\n        nothing: null\n    }\n}",
+		},
 	}
 
 	for _, testCase := range testCases {

@@ -110,3 +110,31 @@ func TestDifferentParsersEquality(t *testing.T) {
 		})
 	}
 }
+
+func TestNormalize(t *testing.T) {
+	input := map[string]any{
+		"count": int64(10),
+		"items": []any{
+			1,
+			float32(2.5),
+			map[string]any{
+				"nested": 3,
+			},
+		},
+		"enabled": true,
+	}
+
+	expected := map[string]any{
+		"count": float64(10),
+		"items": []any{
+			float64(1),
+			float64(2.5),
+			map[string]any{
+				"nested": float64(3),
+			},
+		},
+		"enabled": true,
+	}
+
+	assert.Equal(t, expected, normalize(input))
+}

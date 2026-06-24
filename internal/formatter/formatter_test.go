@@ -55,3 +55,50 @@ func TestNew(t *testing.T) {
 		})
 	}
 }
+
+func TestNewStyleFromString(t *testing.T) {
+	type testCase struct {
+		name          string
+		input         string
+		expectedStyle Style
+		expectedErr   string
+	}
+
+	testCases := []testCase{
+		{
+			name:          "should parse stylish format",
+			input:         "stylish",
+			expectedStyle: Stylish,
+		},
+		{
+			name:          "should parse plain format",
+			input:         "plain",
+			expectedStyle: Plain,
+		},
+		{
+			name:          "should parse json format",
+			input:         "json",
+			expectedStyle: JSON,
+		},
+		{
+			name:        "should fail on unsupported format",
+			input:       "xml",
+			expectedErr: "unable to parse style: unsupported format type xml",
+		},
+	}
+
+	for _, testCase := range testCases {
+		t.Run(testCase.name, func(t *testing.T) {
+			style, err := NewStyleFromString(testCase.input)
+			if testCase.expectedErr != "" {
+				require.Error(t, err)
+				assert.Equal(t, testCase.expectedErr, err.Error())
+
+				return
+			}
+
+			require.NoError(t, err)
+			assert.Equal(t, testCase.expectedStyle, style)
+		})
+	}
+}

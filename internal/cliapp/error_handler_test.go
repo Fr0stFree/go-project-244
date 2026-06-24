@@ -2,9 +2,11 @@ package cliapp
 
 import (
 	"code/internal/parser"
+	"errors"
 	"io/fs"
 	"testing"
 
+	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )
 
@@ -50,6 +52,23 @@ func TestHandleCLIAppError(t *testing.T) {
 			},
 			expectedMessage: `unable to read file "file.json": permission denied`,
 		},
+		{
+			name: "should handle unknown parse error",
+			err: &parser.ParseError{
+				Path: "file.json",
+				Err:  errors.New("invalid json"),
+			},
+			expectedMessage: `unable to parse file "file.json": invalid json`,
+		},
+		{
+			name: "should handle unknown path error",
+			err: &fs.PathError{
+				Op:   "open",
+				Path: "file.json",
+				Err:  errors.New("disk error"),
+			},
+			expectedMessage: `unable to read file "file.json": disk error`,
+		},
 	}
 
 	for _, testCase := range testCases {
@@ -60,4 +79,10 @@ func TestHandleCLIAppError(t *testing.T) {
 			require.Equal(t, testCase.expectedMessage, err.Error())
 		})
 	}
+}
+
+func TestToCLIExitErrorReturnsUnknownError(t *testing.T) {
+	err := errors.New("unexpected error")
+	actual := toCLIExitError(err)
+	assert.Same(t, err, actual)
 }
