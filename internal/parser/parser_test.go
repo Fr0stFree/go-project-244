@@ -36,7 +36,7 @@ func TestParseFile(t *testing.T) {
 			filepath: fixturePath("yaml", "file1.yaml"),
 			expected: map[string]any{
 				"host":    "hexlet.io",
-				"timeout": 50,
+				"timeout": float64(50),
 				"proxy":   "123.234.53.22",
 				"follow":  false,
 			},
@@ -64,6 +64,49 @@ func TestParseFile(t *testing.T) {
 
 			require.NoError(t, err)
 			assert.Equal(t, testCase.expected, parsed)
+		})
+	}
+}
+
+func TestDifferentParsersEquality(t *testing.T) {
+	type testCase struct {
+		name       string
+		firstPath  string
+		secondPath string
+	}
+
+	testCases := []testCase{
+		{
+			name:       "should parse JSON and YAML files with the same content (file1)",
+			firstPath:  fixturePath("json", "file1.json"),
+			secondPath: fixturePath("yaml", "file1.yaml"),
+		},
+		{
+			name:       "should parse JSON and YAML files with the same content (file2)",
+			firstPath:  fixturePath("json", "file2.json"),
+			secondPath: fixturePath("yaml", "file2.yaml"),
+		},
+		{
+			name:       "should parse JSON and YAML files with the same content (file3)",
+			firstPath:  fixturePath("json", "file3.json"),
+			secondPath: fixturePath("yaml", "file3.yaml"),
+		},
+		{
+			name:       "should parse JSON and YAML files with the same content (file4)",
+			firstPath:  fixturePath("json", "file4.json"),
+			secondPath: fixturePath("yaml", "file4.yaml"),
+		},
+	}
+
+	for _, testCase := range testCases {
+		t.Run(testCase.name, func(t *testing.T) {
+			firstParsed, err := ParseFile(testCase.firstPath)
+			require.NoError(t, err)
+
+			secondParsed, err := ParseFile(testCase.secondPath)
+			require.NoError(t, err)
+
+			assert.Equal(t, firstParsed, secondParsed)
 		})
 	}
 }

@@ -26,7 +26,7 @@ func ParseFile(path string) (map[string]any, error) {
 		return nil, newParseError(err, path)
 	}
 
-	return parsed, nil
+	return normalize(parsed).(map[string]any), nil
 }
 
 func selectParseFunc(fileExt string) (parseFunc, error) {
@@ -39,5 +39,37 @@ func selectParseFunc(fileExt string) (parseFunc, error) {
 		return nil, ErrNoFileExtension
 	default:
 		return nil, ErrUnsupportedFileType
+	}
+}
+
+func normalize(value any) any {
+	switch typedValue := value.(type) {
+	case map[string]any:
+		result := make(map[string]any, len(typedValue))
+		for key, nestedValue := range typedValue {
+			result[key] = normalize(nestedValue)
+		}
+
+		return result
+
+	case []any:
+		result := make([]any, len(typedValue))
+		for index, nestedValue := range typedValue {
+			result[index] = normalize(nestedValue)
+		}
+
+		return result
+
+	case int:
+		return float64(typedValue)
+
+	case int64:
+		return float64(typedValue)
+
+	case float32:
+		return float64(typedValue)
+
+	default:
+		return value
 	}
 }
