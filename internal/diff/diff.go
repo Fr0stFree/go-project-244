@@ -24,8 +24,8 @@ const (
 type Record struct {
 	Key      string      `json:"key"`
 	State    recordState `json:"type"`
-	OldValue any         `json:"old,omitempty"`
-	NewValue any         `json:"new,omitempty"`
+	OldValue any         `json:"old"`
+	NewValue any         `json:"new"`
 	Children []Record    `json:"children,omitempty"`
 }
 
