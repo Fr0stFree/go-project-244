@@ -45,7 +45,7 @@ func New(style Style) diffFormatter {
 		return &plainDiffFormatter{}
 	case JSON:
 		return &jsonDiffFormatter{}
+	default:
+		return &stylishDiffFormatter{}
 	}
-
-	panic(fmt.Sprintf("unsupported format type: %s", style))
 }
