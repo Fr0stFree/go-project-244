@@ -26,7 +26,10 @@ func GenDiff(firstPath, secondPath, outputFormat string) (string, error) {
 
 	difference := diff.Build(left, right)
 
-	formatter := formatter.New(style)
+	formatter, err := formatter.New(style)
+	if err != nil {
+		return "", err
+	}
 
 	output, err := formatter.Render(difference)
 	if err != nil {

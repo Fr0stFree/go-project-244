@@ -12,6 +12,7 @@ func TestNew(t *testing.T) {
 		name              string
 		outputFormat      Style
 		expectedFormatter any
+		expectedErr       string
 	}
 
 	testCases := []testCase{
@@ -31,15 +32,24 @@ func TestNew(t *testing.T) {
 			expectedFormatter: &jsonDiffFormatter{},
 		},
 		{
-			name:              "should return stylish formatter for unsupported format",
+			name:              "should fail on unsupported format",
 			outputFormat:      "unsupported",
-			expectedFormatter: &stylishDiffFormatter{},
+			expectedFormatter: nil,
+			expectedErr:       "unable to create formatter: unsupported format type unsupported",
 		},
 	}
 
 	for _, testCase := range testCases {
 		t.Run(testCase.name, func(t *testing.T) {
-			formatter := New(testCase.outputFormat)
+			formatter, err := New(testCase.outputFormat)
+			if testCase.expectedErr != "" {
+				require.Error(t, err)
+				assert.Equal(t, testCase.expectedErr, err.Error())
+
+				return
+			}
+
+			require.NoError(t, err)
 			require.IsType(t, testCase.expectedFormatter, formatter)
 		})
 	}

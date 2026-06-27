@@ -37,15 +37,15 @@ type diffFormatter interface {
 }
 
 // New creates a formatter for the given format type.
-func New(style Style) diffFormatter {
+func New(style Style) (diffFormatter, error) {
 	switch style {
 	case Stylish:
-		return &stylishDiffFormatter{}
+		return &stylishDiffFormatter{}, nil
 	case Plain:
-		return &plainDiffFormatter{}
+		return &plainDiffFormatter{}, nil
 	case JSON:
-		return &jsonDiffFormatter{}
+		return &jsonDiffFormatter{}, nil
 	default:
-		return &stylishDiffFormatter{}
+		return nil, fmt.Errorf("unable to create formatter: unsupported format type %s", style)
 	}
 }
