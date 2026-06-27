@@ -15,6 +15,7 @@ const (
 	firstFileArg     = "first-file"
 	secondFileArg    = "second-file"
 	outputFormatFlag = "format"
+	cliCmdName       = "gendiff"
 )
 
 var cliArgs = []cli.Argument{
@@ -40,7 +41,12 @@ var cliFlags = []cli.Flag{
 
 func appAction(_ context.Context, cmd *cli.Command) error {
 	firstFile := cmd.StringArg(firstFileArg)
+
 	secondFile := cmd.StringArg(secondFileArg)
+	if cmd.NArg() > 0 || firstFile == "" || secondFile == "" {
+		return cli.Exit(fmt.Sprintf("unable to run %s: expected exactly two file arguments", cliCmdName), defaultErrExitCode)
+	}
+
 	outputFormat := cmd.String(outputFormatFlag)
 
 	result, err := code.GenDiff(firstFile, secondFile, outputFormat)
@@ -56,11 +62,11 @@ func appAction(_ context.Context, cmd *cli.Command) error {
 // New creates and returns a new CLI application.
 func New() *cli.Command {
 	return &cli.Command{
-		Name:      "gendiff",
+		Name:      cliCmdName,
 		Usage:     "Compares two configuration files and shows a difference.",
 		Arguments: cliArgs,
 		Flags:     cliFlags,
 		Action:    appAction,
-		UsageText: fmt.Sprintf("gendiff [options] <%s> <%s>", firstFileArg, secondFileArg),
+		UsageText: fmt.Sprintf("%s [options] <%s> <%s>", cliCmdName, firstFileArg, secondFileArg),
 	}
 }
