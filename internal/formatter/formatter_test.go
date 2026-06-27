@@ -12,7 +12,6 @@ func TestNew(t *testing.T) {
 		name              string
 		outputFormat      Style
 		expectedFormatter any
-		shouldExpectPanic bool
 	}
 
 	testCases := []testCase{
@@ -20,38 +19,28 @@ func TestNew(t *testing.T) {
 			name:              "should initialize stylish formatter",
 			outputFormat:      Stylish,
 			expectedFormatter: &stylishDiffFormatter{},
-			shouldExpectPanic: false,
 		},
 		{
 			name:              "should initialize plain formatter",
 			outputFormat:      Plain,
 			expectedFormatter: &plainDiffFormatter{},
-			shouldExpectPanic: false,
 		},
 		{
 			name:              "should initialize json formatter",
 			outputFormat:      JSON,
 			expectedFormatter: &jsonDiffFormatter{},
-			shouldExpectPanic: false,
 		},
 		{
-			name:              "should return error for unsupported format",
+			name:              "should return stylish formatter for unsupported format",
 			outputFormat:      "unsupported",
-			expectedFormatter: nil,
-			shouldExpectPanic: true,
+			expectedFormatter: &stylishDiffFormatter{},
 		},
 	}
 
 	for _, testCase := range testCases {
 		t.Run(testCase.name, func(t *testing.T) {
-			if testCase.shouldExpectPanic {
-				assert.Panics(t, func() {
-					_ = New(testCase.outputFormat)
-				})
-			} else {
-				formatter := New(testCase.outputFormat)
-				require.IsType(t, testCase.expectedFormatter, formatter)
-			}
+			formatter := New(testCase.outputFormat)
+			require.IsType(t, testCase.expectedFormatter, formatter)
 		})
 	}
 }

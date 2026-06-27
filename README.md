@@ -153,29 +153,35 @@ Property 'group3' was added with value: [complex value]
 Output:
 
 ```json
-{
-  "follow": {
+[
+  {
+    "key": "follow",
     "type": "removed",
-    "value": false
+    "old": false
   },
-  "host": {
+  {
+    "key": "host",
     "type": "unchanged",
-    "value": "hexlet.io"
+    "old": "hexlet.io",
+    "new": "hexlet.io"
   },
-  "proxy": {
+  {
+    "key": "proxy",
     "type": "removed",
-    "value": "123.234.53.22"
+    "old": "123.234.53.22"
   },
-  "timeout": {
-    "new": 20,
+  {
+    "key": "timeout",
+    "type": "changed",
     "old": 50,
-    "type": "changed"
+    "new": 20
   },
-  "verbose": {
+  {
+    "key": "verbose",
     "type": "added",
-    "value": true
+    "new": true
   }
-}
+]
 ```
 
 ## Makefile Commands

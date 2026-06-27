@@ -9,24 +9,24 @@ import (
 	"github.com/samber/lo"
 )
 
-type recordState int
+type recordState string
 
 // RecordState represents the type of difference between two values.
 const (
-	Added recordState = iota
-	Removed
-	Unchanged
-	Changed
-	Nested
+	Added     recordState = "added"
+	Removed   recordState = "removed"
+	Unchanged recordState = "unchanged"
+	Changed   recordState = "changed"
+	Nested    recordState = "nested"
 )
 
 // Record represents a difference between two values in a map.
 type Record struct {
-	Key      string
-	State    recordState
-	OldValue any
-	NewValue any
-	Children []Record
+	Key      string      `json:"key"`
+	State    recordState `json:"type"`
+	OldValue any         `json:"old,omitempty"`
+	NewValue any         `json:"new,omitempty"`
+	Children []Record    `json:"children,omitempty"`
 }
 
 // Build compares two parsed configuration files and returns their difference.

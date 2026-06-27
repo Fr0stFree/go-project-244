@@ -20,28 +20,28 @@ func TestJsonRender(t *testing.T) {
 			records: []diff.Record{
 				{Key: "foo", State: diff.Added, OldValue: nil, NewValue: "bar", Children: nil},
 			},
-			expected: "{\n  \"foo\": {\n    \"type\": \"added\",\n    \"value\": \"bar\"\n  }\n}",
+			expected: "[\n  {\n    \"key\": \"foo\",\n    \"type\": \"added\",\n    \"new\": \"bar\"\n  }\n]",
 		},
 		{
 			name: "should render removed record",
 			records: []diff.Record{
 				{Key: "foo", State: diff.Removed, OldValue: "bar", NewValue: nil, Children: nil},
 			},
-			expected: "{\n  \"foo\": {\n    \"type\": \"removed\",\n    \"value\": \"bar\"\n  }\n}",
+			expected: "[\n  {\n    \"key\": \"foo\",\n    \"type\": \"removed\",\n    \"old\": \"bar\"\n  }\n]",
 		},
 		{
 			name: "should render changed record",
 			records: []diff.Record{
 				{Key: "foo", State: diff.Changed, OldValue: "bar", NewValue: "baz", Children: nil},
 			},
-			expected: "{\n  \"foo\": {\n    \"new\": \"baz\",\n    \"old\": \"bar\",\n    \"type\": \"changed\"\n  }\n}",
+			expected: "[\n  {\n    \"key\": \"foo\",\n    \"type\": \"changed\",\n    \"old\": \"bar\",\n    \"new\": \"baz\"\n  }\n]",
 		},
 		{
 			name: "should render unchanged record",
 			records: []diff.Record{
 				{Key: "foo", State: diff.Unchanged, OldValue: "bar", NewValue: "bar", Children: nil},
 			},
-			expected: "{\n  \"foo\": {\n    \"type\": \"unchanged\",\n    \"value\": \"bar\"\n  }\n}",
+			expected: "[\n  {\n    \"key\": \"foo\",\n    \"type\": \"unchanged\",\n    \"old\": \"bar\",\n    \"new\": \"bar\"\n  }\n]",
 		},
 		{
 			name: "should render nested records",
@@ -53,7 +53,7 @@ func TestJsonRender(t *testing.T) {
 					},
 				},
 			},
-			expected: "{\n  \"foo\": {\n    \"bar\": {\n      \"type\": \"added\",\n      \"value\": \"baz\"\n    }\n  }\n}",
+			expected: "[\n  {\n    \"key\": \"foo\",\n    \"type\": \"nested\",\n    \"children\": [\n      {\n        \"key\": \"bar\",\n        \"type\": \"added\",\n        \"new\": \"baz\"\n      }\n    ]\n  }\n]",
 		},
 		{
 			name: "should render unchanged records inside nested records",
@@ -71,7 +71,7 @@ func TestJsonRender(t *testing.T) {
 					},
 				},
 			},
-			expected: "{\n  \"common\": {\n    \"setting6\": {\n      \"key\": {\n        \"type\": \"unchanged\",\n        \"value\": \"value\"\n      },\n      \"ops\": {\n        \"type\": \"added\",\n        \"value\": \"vops\"\n      }\n    }\n  }\n}",
+			expected: "[\n  {\n    \"key\": \"common\",\n    \"type\": \"nested\",\n    \"children\": [\n      {\n        \"key\": \"setting6\",\n        \"type\": \"nested\",\n        \"children\": [\n          {\n            \"key\": \"key\",\n            \"type\": \"unchanged\",\n            \"old\": \"value\",\n            \"new\": \"value\"\n          },\n          {\n            \"key\": \"ops\",\n            \"type\": \"added\",\n            \"new\": \"vops\"\n          }\n        ]\n      }\n    ]\n  }\n]",
 		},
 	}
 
