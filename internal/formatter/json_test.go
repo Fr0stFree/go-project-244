@@ -20,14 +20,14 @@ func TestJsonRender(t *testing.T) {
 			records: []diff.Record{
 				{Key: "foo", State: diff.Added, OldValue: nil, NewValue: "bar", Children: nil},
 			},
-			expected: "[\n  {\n    \"key\": \"foo\",\n    \"type\": \"added\",\n    \"new\": \"bar\"\n  }\n]",
+			expected: "[\n  {\n    \"key\": \"foo\",\n    \"type\": \"added\",\n    \"old\": null,\n    \"new\": \"bar\"\n  }\n]",
 		},
 		{
 			name: "should render removed record",
 			records: []diff.Record{
 				{Key: "foo", State: diff.Removed, OldValue: "bar", NewValue: nil, Children: nil},
 			},
-			expected: "[\n  {\n    \"key\": \"foo\",\n    \"type\": \"removed\",\n    \"old\": \"bar\"\n  }\n]",
+			expected: "[\n  {\n    \"key\": \"foo\",\n    \"type\": \"removed\",\n    \"old\": \"bar\",\n    \"new\": null\n  }\n]",
 		},
 		{
 			name: "should render changed record",
