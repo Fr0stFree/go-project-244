@@ -53,13 +53,15 @@ The compiled program will be available at:
 ## Usage
 
 ```bash
-./bin/gendiff [global options] <first-file> <second-file>
+./bin/gendiff [options] <first-file> <second-file>
 ```
 
 Arguments:
 
 - `first-file` - path to the first configuration file.
 - `second-file` - path to the second configuration file.
+
+The command expects exactly two positional file arguments.
 
 Options:
 
@@ -157,7 +159,8 @@ Output:
   {
     "key": "follow",
     "type": "removed",
-    "old": false
+    "old": false,
+    "new": null
   },
   {
     "key": "host",
@@ -168,7 +171,8 @@ Output:
   {
     "key": "proxy",
     "type": "removed",
-    "old": "123.234.53.22"
+    "old": "123.234.53.22",
+    "new": null
   },
   {
     "key": "timeout",
@@ -179,6 +183,7 @@ Output:
   {
     "key": "verbose",
     "type": "added",
+    "old": null,
     "new": true
   }
 ]
@@ -195,7 +200,7 @@ The project includes a `Makefile` with common development commands:
 | `make test-coverage` | Runs tests, writes `coverage.out`, and prints coverage by function. |
 | `make lint` | Checks formatting with `gofmt` and runs the installed `golangci-lint`. |
 | `make lint-fix` | Formats code with `gofmt` and runs the installed `golangci-lint --fix`. |
-| `make install-lint` | Installs `golangci-lint` if it is missing. |
+| `make install-lint` | Installs the configured `golangci-lint` version. |
 
 To update the coverage badge manually:
 
@@ -224,7 +229,7 @@ make lint
 |-- internal/diff      # Builds the internal diff representation
 |-- internal/formatter # Renders diff in stylish, plain, and JSON formats
 |-- internal/parser    # Parses JSON and YAML files
-|-- internal/testdata  # Test files used by tests and examples
+|-- internal/testdata  # Fixtures and expected outputs used by tests and examples
 |-- gendiff.go         # Public package API
 `-- Makefile           # Development commands
 ```
