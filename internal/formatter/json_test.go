@@ -20,28 +20,28 @@ func TestJsonRender(t *testing.T) {
 			records: []diff.Record{
 				{Key: "foo", State: diff.Added, OldValue: nil, NewValue: "bar", Children: nil},
 			},
-			expected: "[\n  {\n    \"key\": \"foo\",\n    \"type\": \"added\",\n    \"old\": null,\n    \"new\": \"bar\"\n  }\n]",
+			expected: "{\n  \"foo\": {\n    \"key\": \"foo\",\n    \"type\": \"added\",\n    \"old\": null,\n    \"new\": \"bar\"\n  }\n}",
 		},
 		{
 			name: "should render removed record",
 			records: []diff.Record{
 				{Key: "foo", State: diff.Removed, OldValue: "bar", NewValue: nil, Children: nil},
 			},
-			expected: "[\n  {\n    \"key\": \"foo\",\n    \"type\": \"removed\",\n    \"old\": \"bar\",\n    \"new\": null\n  }\n]",
+			expected: "{\n  \"foo\": {\n    \"key\": \"foo\",\n    \"type\": \"removed\",\n    \"old\": \"bar\",\n    \"new\": null\n  }\n}",
 		},
 		{
 			name: "should render changed record",
 			records: []diff.Record{
 				{Key: "foo", State: diff.Changed, OldValue: "bar", NewValue: "baz", Children: nil},
 			},
-			expected: "[\n  {\n    \"key\": \"foo\",\n    \"type\": \"changed\",\n    \"old\": \"bar\",\n    \"new\": \"baz\"\n  }\n]",
+			expected: "{\n  \"foo\": {\n    \"key\": \"foo\",\n    \"type\": \"changed\",\n    \"old\": \"bar\",\n    \"new\": \"baz\"\n  }\n}",
 		},
 		{
 			name: "should render unchanged record",
 			records: []diff.Record{
 				{Key: "foo", State: diff.Unchanged, OldValue: "bar", NewValue: "bar", Children: nil},
 			},
-			expected: "[\n  {\n    \"key\": \"foo\",\n    \"type\": \"unchanged\",\n    \"old\": \"bar\",\n    \"new\": \"bar\"\n  }\n]",
+			expected: "{\n  \"foo\": {\n    \"key\": \"foo\",\n    \"type\": \"unchanged\",\n    \"old\": \"bar\",\n    \"new\": \"bar\"\n  }\n}",
 		},
 	}
 
